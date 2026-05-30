@@ -1,0 +1,26 @@
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+{% endif %}
+<div class="row g-3">
+    {% for field in form %}
+        <div class="col-md-6">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+            {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+    {% endfor %}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('input, select, textarea').forEach(function (el) {
+            if (!el.classList.contains('btn') && !el.classList.contains('form-check-input')) {
+                el.classList.add('form-control');
+                if (el.tagName === 'SELECT') {
+                    el.classList.remove('form-control');
+                    el.classList.add('form-select');
+                }
+            }
+        });
+    });
+</script>

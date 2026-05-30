@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Suppression{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1 class="h4 mb-3">Confirmer la suppression</h1>
+                <p class="mb-4">Voulez-vous vraiment supprimer <strong>{{ object }}</strong> ?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-danger" type="submit">Oui, supprimer</button>
+                        <a class="btn btn-outline-secondary" href="javascript:history.back()">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Étudiants par cours{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Rapport : étudiants par cours</h1>
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label class="form-label">Cours</label>
+                <select class="form-select" name="course">
+                    <option value="">Choisir un cours</option>
+                    {% for course in courses %}
+                        <option value="{{ course.pk }}" {% if selected_course and selected_course.pk == course.pk %}selected{% endif %}>{{ course.code }} - {{ course.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary w-100" type="submit">Afficher</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h2 class="h5 mb-0">{% if selected_course %}{{ selected_course.title }}{% else %}Aucun cours sélectionné{% endif %}</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead><tr><th>Étudiant</th><th>Classe</th><th>Statut</th></tr></thead>
+            <tbody>
+                {% for enrollment in enrollments %}
+                <tr>
+                    <td><a href="{% url 'student_detail' enrollment.student.pk %}">{{ enrollment.student }}</a></td>
+                    <td>{{ enrollment.student.classroom.name }} - {{ enrollment.student.classroom.level }}</td>
+                    <td>{{ enrollment.get_status_display }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center text-muted py-4">Aucun étudiant à afficher.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

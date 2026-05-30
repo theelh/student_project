@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Détail étudiant{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-1">{{ student.last_name }} {{ student.first_name }}</h1>
+        <p class="text-muted mb-0">Détail de l'étudiant et cours inscrits.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'student_edit' student.pk %}">Modifier</a>
+        <a class="btn btn-primary" href="{% url 'enrollment_add' %}">Ajouter une inscription</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><h2 class="h5 mb-0">Informations</h2></div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Email</dt><dd class="col-sm-8">{{ student.email }}</dd>
+                    <dt class="col-sm-4">Naissance</dt><dd class="col-sm-8">{{ student.birth_date }}</dd>
+                    <dt class="col-sm-4">Filière</dt><dd class="col-sm-8">{{ student.program.name }}</dd>
+                    <dt class="col-sm-4">Classe</dt><dd class="col-sm-8">{{ student.classroom.name }} - {{ student.classroom.level }}</dd>
+                    <dt class="col-sm-4">Téléphone</dt><dd class="col-sm-8">{{ student.phone_number|default:'—' }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white"><h2 class="h5 mb-0">Cours auxquels l'étudiant est inscrit</h2></div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead><tr><th>Cours</th><th>Code</th><th>Statut</th><th>Date</th></tr></thead>
+                    <tbody>
+                        {% for enrollment in student.enrollments.all %}
+                        <tr>
+                            <td><a href="{% url 'course_detail' enrollment.course.pk %}">{{ enrollment.course.title }}</a></td>
+                            <td>{{ enrollment.course.code }}</td>
+                            <td>{{ enrollment.get_status_display }}</td>
+                            <td>{{ enrollment.enrolled_at }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center text-muted py-4">Aucune inscription enregistrée.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

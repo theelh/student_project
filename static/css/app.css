@@ -1,0 +1,13 @@
+body {
+    background-color: #f5f7fb;
+}
+.card {
+    border: 0;
+    border-radius: 1rem;
+}
+.table > :not(caption) > * > * {
+    padding: 0.9rem 1rem;
+}
+.navbar-brand {
+    font-weight: 700;
+}

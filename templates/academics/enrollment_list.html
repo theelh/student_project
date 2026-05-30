@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Inscriptions{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-1">Inscriptions</h1>
+        <p class="text-muted mb-0">Gestion des inscriptions des étudiants aux cours.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'enrollment_add' %}">Ajouter une inscription</a>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-8">
+                <label class="form-label">Recherche</label>
+                <input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Étudiant ou cours">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Statut</label>
+                <select class="form-select" name="status">
+                    <option value="">Tous</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit">Filtrer</button></div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead><tr><th>Étudiant</th><th>Cours</th><th>Statut</th><th>Date</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+            {% for enrollment in enrollments %}
+                <tr>
+                    <td><a href="{% url 'student_detail' enrollment.student.pk %}">{{ enrollment.student }}</a></td>
+                    <td><a href="{% url 'course_detail' enrollment.course.pk %}">{{ enrollment.course.title }}</a></td>
+                    <td>{{ enrollment.get_status_display }}</td>
+                    <td>{{ enrollment.enrolled_at }}</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'enrollment_edit' enrollment.pk %}">Modifier</a>
+                        <a class="btn btn-sm btn-outline-danger" href="{% url 'enrollment_delete' enrollment.pk %}">Supprimer</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5" class="text-center text-muted py-4">Aucune inscription trouvée.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'academics/partials/pagination.html' %}
+</div>
+{% endblock %}

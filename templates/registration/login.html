@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Connexion{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-3 text-center">Connexion</h1>
+                <p class="text-muted text-center">Projet Django - Gestion des étudiants</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label class="form-label" for="id_username">Nom d'utilisateur</label>
+                        <input class="form-control" type="text" name="username" id="id_username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="id_password">Mot de passe</label>
+                        <input class="form-control" type="password" name="password" id="id_password" required>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Se connecter</button>
+                </form>
+                <hr>
+                <div class="small text-muted">
+                    Démo : <code>admin / Admin12345!</code><br>
+                    <code>gestionnaire / Gestion12345!</code><br>
+                    <code>consultation / Consult12345!</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
