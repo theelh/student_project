@@ -1,34 +1,93 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-    <div>
-        <h1 class="h3 mb-1">Tableau de bord</h1>
-        <p class="text-muted mb-0">Vue générale du projet de gestion des étudiants.</p>
-    </div>
-    <div class="d-flex gap-2 flex-wrap">
-        <a class="btn btn-primary" href="{% url 'student_add' %}">Nouvel étudiant</a>
-        <a class="btn btn-outline-primary" href="{% url 'enrollment_add' %}">Nouvelle inscription</a>
+
+<div class="bg-primary bg-gradient text-white rounded-4 p-4 mb-4 shadow">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="fw-bold mb-1">📊 Tableau de bord</h1>
+            <p class="mb-0 opacity-75">
+                Vue générale du système de gestion des étudiants.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a class="btn btn-light fw-semibold" href="{% url 'student_add' %}">
+                ➕ Nouvel étudiant
+            </a>
+
+            <a class="btn btn-outline-light" href="{% url 'enrollment_add' %}">
+                📝 Nouvelle inscription
+            </a>
+        </div>
     </div>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-6 col-xl-2"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Étudiants</div><div class="display-6">{{ counts.students }}</div></div></div></div>
-    <div class="col-md-6 col-xl-2"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Cours</div><div class="display-6">{{ counts.courses }}</div></div></div></div>
-    <div class="col-md-6 col-xl-2"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Inscriptions</div><div class="display-6">{{ counts.enrollments }}</div></div></div></div>
-    <div class="col-md-6 col-xl-2"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Filières</div><div class="display-6">{{ counts.programs }}</div></div></div></div>
-    <div class="col-md-6 col-xl-2"><div class="card shadow-sm h-100"><div class="card-body"><div class="text-muted small">Classes</div><div class="display-6">{{ counts.classrooms }}</div></div></div></div>
+<!-- Statistics -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6 col-xl">
+        <div class="card border-0 shadow-sm bg-primary text-white rounded-4">
+            <div class="card-body">
+                <small class="opacity-75">Étudiants</small>
+                <h2 class="fw-bold mb-0">{{ counts.students }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl">
+        <div class="card border-0 shadow-sm bg-success text-white rounded-4">
+            <div class="card-body">
+                <small class="opacity-75">Cours</small>
+                <h2 class="fw-bold mb-0">{{ counts.courses }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl">
+        <div class="card border-0 shadow-sm bg-warning text-dark rounded-4">
+            <div class="card-body">
+                <small>Inscriptions</small>
+                <h2 class="fw-bold mb-0">{{ counts.enrollments }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl">
+        <div class="card border-0 shadow-sm bg-info text-white rounded-4">
+            <div class="card-body">
+                <small class="opacity-75">Filières</small>
+                <h2 class="fw-bold mb-0">{{ counts.programs }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl">
+        <div class="card border-0 shadow-sm bg-danger text-white rounded-4">
+            <div class="card-body">
+                <small class="opacity-75">Classes</small>
+                <h2 class="fw-bold mb-0">{{ counts.classrooms }}</h2>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="row g-4">
-    <div class="col-lg-7">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-white">
-                <h2 class="h5 mb-0">Inscriptions récentes</h2>
+
+    <!-- Recent Enrollments -->
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">
+                    📚 Inscriptions récentes
+                </h5>
             </div>
+
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead>
+                <table class="table align-middle table-hover mb-0">
+                    <thead class="table-light">
                         <tr>
                             <th>Étudiant</th>
                             <th>Cours</th>
@@ -36,38 +95,72 @@
                             <th>Date</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {% for enrollment in recent_enrollments %}
                         <tr>
-                            <td><a href="{% url 'student_detail' enrollment.student.pk %}">{{ enrollment.student }}</a></td>
-                            <td><a href="{% url 'course_detail' enrollment.course.pk %}">{{ enrollment.course.title }}</a></td>
-                            <td>{{ enrollment.get_status_display }}</td>
+                            <td>
+                                <a class="fw-semibold text-decoration-none"
+                                   href="{% url 'student_detail' enrollment.student.pk %}">
+                                    {{ enrollment.student }}
+                                </a>
+                            </td>
+
+                            <td>
+                                <a class="text-decoration-none"
+                                   href="{% url 'course_detail' enrollment.course.pk %}">
+                                    {{ enrollment.course.title }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-success px-3 py-2">
+                                    {{ enrollment.get_status_display }}
+                                </span>
+                            </td>
+
                             <td>{{ enrollment.enrolled_at }}</td>
                         </tr>
                         {% empty %}
-                        <tr><td colspan="4" class="text-center text-muted py-4">Aucune inscription pour le moment.</td></tr>
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                Aucune inscription pour le moment.
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
+
                 </table>
             </div>
         </div>
     </div>
-    <div class="col-lg-5">
-        <div class="card shadow-sm h-100">
-            <div class="card-header bg-white">
-                <h2 class="h5 mb-0">Étudiants par filière</h2>
+
+    <!-- Programs -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="fw-bold mb-0">
+                    🎓 Étudiants par filière
+                </h5>
             </div>
-            <ul class="list-group list-group-flush">
+
+            <div class="card-body">
                 {% for item in students_by_program %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <span>{{ item.name }}</span>
-                    <span class="badge text-bg-primary rounded-pill">{{ item.total }}</span>
-                </li>
+
+                    <span class="badge bg-primary rounded-pill px-3 py-2">
+                        {{ item.total }}
+                    </span>
+                </div>
                 {% empty %}
-                <li class="list-group-item text-muted">Aucune donnée disponible.</li>
+                <p class="text-muted mb-0">
+                    Aucune donnée disponible.
+                </p>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
     </div>
+
 </div>
+
 {% endblock %}
